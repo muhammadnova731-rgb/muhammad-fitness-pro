@@ -1,0 +1,9 @@
+{
+  "name": "MUHAMMAD FITNESS PRO",
+  "short_name": "MFP Fitness",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#0b1220",
+  "theme_color": "#101827",
+  "lang": "tg"
+}
