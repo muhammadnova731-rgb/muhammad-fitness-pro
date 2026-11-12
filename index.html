@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="tg">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#101827">
+<link rel="manifest" href="manifest.webmanifest">
+<title>MUHAMMAD FITNESS PRO</title>
+<style>
+:root{color-scheme:dark;--bg:#0b1220;--panel:#151f31;--muted:#aab7cc;--accent:#39d98a;--line:#29364c}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#f4f7fb;font:16px system-ui,Arial,sans-serif}
+header{padding:24px 18px 18px;background:linear-gradient(135deg,#14243a,#102b2a);border-bottom:1px solid var(--line)}
+h1{font-size:23px;margin:0 0 6px;letter-spacing:.4px}header p{margin:0;color:var(--muted);font-size:14px}
+main{max-width:760px;margin:auto;padding:16px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:14px}
+h2{font-size:18px;margin:0 0 12px}.muted{color:var(--muted);font-size:13px}
+select,button{font:inherit;border-radius:10px;border:1px solid var(--line);padding:11px;background:#202d42;color:white}
+button{background:var(--accent);color:#092016;font-weight:700;border:0;cursor:pointer}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.row select{flex:1;min-width:150px}
+.exercise{padding:12px 0;border-bottom:1px solid var(--line)}.exercise:last-child{border:0}
+.exercise label{display:flex;gap:10px;align-items:flex-start}.exercise input{width:19px;height:19px;accent-color:var(--accent);margin-top:2px}
+small{color:var(--muted)}.progress{height:9px;background:#27344a;border-radius:20px;overflow:hidden;margin-top:9px}.bar{height:100%;background:var(--accent);width:0}
+.stat{font-size:25px;font-weight:800;color:var(--accent)}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:12px 0 30px}
+</style>
+</head>
+<body>
+<header><h1>MUHAMMAD FITNESS PRO</h1><p>Нақшаи 30-рӯзаи машқ дар хона · кор бе интернет пас аз боркунии аввал</p></header>
+<main>
+<section class="panel">
+<h2>Пешрафти ту</h2>
+<div class="row"><div><div class="stat" id="done">0/30</div><small>рӯз анҷомёфта</small></div><div style="flex:1"><div class="progress"><div class="bar" id="bar"></div></div><small id="percent">0% иҷро шуд</small></div></div>
+</section>
+<section class="panel">
+<h2>Интихоби рӯз</h2>
+<div class="row"><select id="day"></select><button id="reset">Аз нав оғоз</button></div>
+<p class="muted">Ҳар машқро бо техникаи дуруст иҷро кун. Агар дард ё сарчархӣ пайдо шавад, ист ва истироҳат кун.</p>
+</section>
+<section class="panel">
+<h2 id="dayTitle">Рӯзи 1</h2><p class="muted" id="dayNote"></p>
+<div id="tasks"></div>
+<div class="row" style="margin-top:14px"><button id="complete">Ин рӯзро анҷом додам</button></div>
+</section>
+<section class="panel">
+<h2>Ёдрасии ғизо ва истироҳат</h2>
+<ul>
+<li>Хӯрокҳои оддии гуногун бихӯр: биринҷ, картошка, тухм, лӯбиё, гӯшт ё маҳсулоти ширӣ, мева ва сабзавот.</li>
+<li>Обро мунтазам бинӯш ва хӯрокро қасдан маҳдуд накун.</li>
+<li>Хоби кофӣ ва рӯзҳои истироҳат қисми барномаанд.</li>
+<li>Пеш аз машқ 5 дақиқа гармшавӣ кун.</li>
+</ul>
+</section>
+<footer>MUHAMMAD FITNESS PRO · Версияи офлайнӣ</footer>
+</main>
+<script>
+const plan = [
+["Оғози сабук",["Гармшавӣ — 5 дақиқа","Нишасту хез (squat) — 2×8","Такя ба девор (wall push-up) — 2×8","Қадамзанӣ дар ҷой — 3 дақиқа"]],
+["Қувваи пой",["Гармшавӣ — 5 дақиқа","Нишасту хез — 2×10","Баланд кардани пошна — 2×12","Қадамзанӣ — 5 дақиқа"]],
+["Болоии бадан",["Гармшавӣ — 5 дақиқа","Такя ба девор — 2×10","Bird-dog — 2×6 ҳар тараф","Планкаи сабук — 2×10 сония"]],
+["Истироҳати фаъол",["Қадамзании ором — 10–15 дақиқа","Кашишҳои сабук — 5 дақиқа"]],
+["Тамрини умумӣ",["Гармшавӣ — 5 дақиқа","Нишасту хез — 2×10","Такя ба девор — 2×10","Glute bridge — 2×10"]],
+["Ҳаракати сабук",["Қадамзании ором — 10 дақиқа","Кашишҳои сабук — 5 дақиқа"]],
+["Истироҳат",["Истироҳат ё сайругашти кӯтоҳи ихтиёрӣ"]],
+];
+const days = Array.from({length:30},(_,i)=>plan[i%7]);
+const daySel=document.getElementById('day'), tasks=document.getElementById('tasks');
+for(let i=1;i<=30;i++){let o=document.createElement('option');o.value=i-1;o.textContent='Рӯзи '+i;daySel.append(o)}
+let completed=JSON.parse(localStorage.getItem('mfp_done')||'[]');
+function render(){
+ const i=+daySel.value,[name,items]=days[i];document.getElementById('dayTitle').textContent='Рӯзи '+(i+1)+' — '+name;
+ document.getElementById('dayNote').textContent=(i%7===6)?'Имрӯз вақти барқароршавӣ аст.':'Ҳама машқҳоро оромона ва мувофиқи имконият иҷро кун.';
+ tasks.innerHTML='';
+ items.forEach((t,j)=>{let div=document.createElement('div');div.className='exercise';let label=document.createElement('label');let cb=document.createElement('input');cb.type='checkbox';cb.checked=!!(JSON.parse(localStorage.getItem('mfp_tasks')||'{}')[i+'-'+j]);cb.addEventListener('change',()=>{let s=JSON.parse(localStorage.getItem('mfp_tasks')||'{}');s[i+'-'+j]=cb.checked;localStorage.setItem('mfp_tasks',JSON.stringify(s))});let span=document.createElement('span');span.textContent=t;label.append(cb,span);div.append(label);tasks.append(div)});
+ document.getElementById('complete').textContent=completed.includes(i)?'Рӯз анҷом ёфтааст ✓':'Ин рӯзро анҷом додам';update();
+}
+function update(){let n=completed.length;document.getElementById('done').textContent=n+'/30';document.getElementById('bar').style.width=(n/30*100)+'%';document.getElementById('percent').textContent=Math.round(n/30*100)+'% иҷро шуд'}
+document.getElementById('complete').onclick=()=>{let i=+daySel.value;if(!completed.includes(i))completed.push(i);localStorage.setItem('mfp_done',JSON.stringify(completed));render()};
+daySel.onchange=render;
+document.getElementById('reset').onclick=()=>{if(confirm('Ҳамаи пешрафт пок шавад?')){completed=[];localStorage.removeItem('mfp_done');localStorage.removeItem('mfp_tasks');render()}};
+render();
+if('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('./sw.js').catch(()=>{});
+</script>
+</body></html>
